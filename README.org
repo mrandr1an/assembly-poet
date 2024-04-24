@@ -1,5 +1,8 @@
-* Assembly Poet
-/Assembly poet allows you to easily generate x86-64 (and in the future other) nasm assembly using Rusts powerfull typesystem/
+#+TITLE: Assembly Poet
+#+AUTHOR: Chris Liourtas
+#+TAGS: LIBRARY,RUST
+* Assembly Poet📚 
+🖊️ /Assembly poet allows you to easily generate x86-64 (and in the future other) nasm assembly using Rusts powerfull typesystem, as if you were a poet/
 ** Motivation
 ** Research
 ** Usage
@@ -7,3 +10,4 @@
 *** Traits
 *** Structs
 ** References
+[[https://www.nasm.us/doc/][Official Nasm docs]]
