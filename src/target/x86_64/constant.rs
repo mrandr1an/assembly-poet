@@ -1,4 +1,4 @@
-use super::token::Token;
+use std::fmt::Display;
 
 enum Base {
     Binary,
@@ -58,4 +58,58 @@ impl<'a> From<&'a str> for CharacterString<'a> {
     }
 }
 
-type StringConstant<'a> = &'a str;
+struct StringConstant<'a>(&'a str);
+
+pub trait Constant {
+    fn generate(&self) -> impl Display;
+}
+
+pub struct List<C, const N: usize>
+where
+    C: Constant,
+{
+    constants: [C; N],
+}
+
+impl Constant for Numeric {
+    fn generate(&self) -> impl Display {
+        match self.base {
+            Base::Binary => String::from("0b") + &self.value.to_string(),
+            Base::Octal => String::from("0o") + &self.value.to_string(),
+            Base::Dec => String::from("0d") + &self.value.to_string(),
+            Base::Hex => String::from("0x") + &self.value.to_string(),
+        }
+    }
+}
+
+impl<'a> Constant for CharacterString<'a> {
+    fn generate(&self) -> impl Display {
+        String::from("`") + self.value + &String::from("`")
+    }
+}
+
+impl<'a> Constant for CharacterConstant<'a> {
+    fn generate(&self) -> impl Display {
+        String::from("\'") + self.value + &String::from("\'")
+    }
+}
+
+impl<C, const N: usize> Constant for List<C, N>
+where
+    C: Constant,
+{
+    fn generate(&self) -> impl Display {
+        let mut open_paren = String::from("%(");
+        let mut it = self.constants.iter().peekable();
+        while let Some(constant) = it.next() {
+            open_paren = open_paren + &constant.generate().to_string();
+            if it.peek().is_none() {
+                open_paren += ")";
+                break;
+            } else {
+                open_paren += ",";
+            }
+        }
+        open_paren
+    }
+}
