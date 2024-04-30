@@ -1,3 +1,10 @@
 * Assembly Poet Docs
+** Introduction
 #+transclude: [[id:096bba1f-ac7b-405e-b191-6ab62c5b71b4][Types]] :level 2
-* Design
+
+** Design
+ Given the information above we need to somehow manage a user-friendly, perfomant and reliabe library.
+ Here is the gist:
+#+begin_center
+A nasm type /T/ is a trait with an assossiated 
+#+end_center
