@@ -4,9 +4,11 @@ use super::constant::{CharacterConstant, Constant, Numeric};
 
 pub trait Instruction<const A: usize = 2> {}
 
-pub trait DX {
-    type Const: Constant;
-    fn generate(&self, arg: Self::Const) -> impl Display;
+pub trait DX<C>
+where
+    C: Constant,
+{
+    fn generate(&self, arg: C) -> impl Display;
 }
 
 pub trait ResX {
@@ -35,9 +37,11 @@ pub enum DeclareInitialized {
     DZ,
 }
 
-impl DX for DeclareInitialized {
-    type Const = Numeric;
-    fn generate(&self, arg: Self::Const) -> impl Display {
+impl<C> DX<C> for DeclareInitialized
+where
+    C: Constant,
+{
+    fn generate(&self, arg: C) -> impl Display {
         match self {
             DeclareInitialized::DB => String::from("db ") + &arg.generate().to_string(),
             DeclareInitialized::DD => String::from("dd ") + &arg.generate().to_string(),
