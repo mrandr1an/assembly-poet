@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use super::constant::{CharacterConstant, Constant, Numeric};
+use super::constant::Constant;
 
 pub trait Instruction<const A: usize = 2> {}
 
@@ -67,5 +67,27 @@ impl ResX for DeclareUninitialized {
             DeclareUninitialized::RESY => String::from("resy ") + &amount.to_string(),
             DeclareUninitialized::RESZ => String::from("resz ") + &amount.to_string(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::DeclareInitialized;
+    use crate::target::x86_64::constant::{CharacterConstant, Numeric};
+    use crate::target::x86_64::instruction::DX;
+
+    #[test]
+    fn declare_characterconst() {
+        let char_const: CharacterConstant = "hello".into();
+        let db = DeclareInitialized::DB;
+        assert_eq!(db.generate(char_const).to_string(), "db 'hello'");
+    }
+
+    #[test]
+    fn declare_numeric() {
+        let number: Numeric = 183.into();
+        let db = DeclareInitialized::DB;
+        assert_eq!(db.generate(number).to_string(), "db 0d183");
     }
 }
